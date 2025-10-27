@@ -1,31 +1,31 @@
-import React, {
-  createContext,
-  useContext,
-  ReactNode,
-  useState,
-  useEffect,
-} from "react";
-import { useStream } from "@langchain/langgraph-sdk/react";
-import { type Message } from "@langchain/langgraph-sdk";
-import {
-  uiMessageReducer,
-  isUIMessage,
-  isRemoveUIMessage,
-  type UIMessage,
-  type RemoveUIMessage,
-} from "@langchain/langgraph-sdk/react-ui";
-import { useQueryState } from "nuqs";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { CelHiveLogoSVG } from "@/components/icons/celhive";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight } from "lucide-react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { getApiKey } from "@/lib/api-key";
-import { useThreads } from "./Thread";
+import { type Message } from "@langchain/langgraph-sdk";
+import { useStream } from "@langchain/langgraph-sdk/react";
+import {
+  isRemoveUIMessage,
+  isUIMessage,
+  uiMessageReducer,
+  type RemoveUIMessage,
+  type UIMessage,
+} from "@langchain/langgraph-sdk/react-ui";
+import { ArrowRight } from "lucide-react";
+import { redirect } from "next/navigation";
+import { useQueryState } from "nuqs";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "sonner";
 import { useAuth } from "./Auth";
-import { LoginButton } from "@/components/auth/LoginButton";
+import { useThreads } from "./Thread";
 
 export type StateType = { messages: Message[]; ui?: UIMessage[] };
 
@@ -55,11 +55,11 @@ async function checkGraphStatus(
 ): Promise<boolean> {
   try {
     const headers: Record<string, string> = {};
-    
+
     if (apiKey) {
       headers["X-Api-Key"] = apiKey;
     }
-    
+
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
@@ -90,7 +90,7 @@ const StreamSession = ({
 }) => {
   const [threadId, setThreadId] = useQueryState("threadId");
   const { getThreads, setThreads } = useThreads();
-  
+
   const streamValue = useTypedStream({
     apiUrl,
     apiKey: apiKey ?? undefined,
@@ -98,7 +98,7 @@ const StreamSession = ({
     threadId: threadId ?? null,
     fetchStateHistory: true,
     defaultHeaders: {
-      ...(token && { 
+      ...(token && {
         Authorization: `Bearer ${token}`,
         'X-Debug-Token': token.substring(0, 10) + '...' // 调试用
       }),
@@ -149,7 +149,7 @@ export const StreamProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { isAuthenticated, token, isLoading: authLoading } = useAuth();
-  
+
   // Get environment variables
   const envApiUrl: string | undefined = process.env.NEXT_PUBLIC_API_URL;
   const envAssistantId: string | undefined =
@@ -198,20 +198,7 @@ export const StreamProvider: React.FC<{ children: ReactNode }> = ({
 
   // Show login form if not authenticated
   if (!isAuthenticated) {
-    return (
-      <div className="flex min-h-screen w-full items-center justify-center p-4">
-        <div className="animate-in fade-in-0 zoom-in-95 bg-background flex max-w-3xl flex-col rounded-lg border shadow-lg">
-          <div className="mt-14 flex flex-col gap-2 border-b p-6">
-            <div className="flex flex-col items-start gap-2">
-              <CelHiveLogoSVG className="h-7" />
-            </div>
-          </div>
-          <div className="p-6">
-            <LoginButton />
-          </div>
-        </div>
-      </div>
-    );
+    redirect('/login');
   }
 
   // Show the form if we: don't have an API URL, or don't have an assistant ID

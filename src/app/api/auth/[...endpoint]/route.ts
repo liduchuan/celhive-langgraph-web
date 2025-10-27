@@ -7,7 +7,7 @@ export async function POST(
   try {
     const { endpoint } = params;
     const endpointPath = endpoint.join('/');
-    
+
     // 验证endpoint参数
     if (!endpointPath || endpoint.length === 0) {
       return NextResponse.json(
@@ -25,10 +25,10 @@ export async function POST(
     }
 
     const body = await request.json();
-    
+
     // 构建完整的API URL
     const apiUrl = `${authBaseUrl}/gw/chatweb/user/${endpointPath}`;
-    
+
     console.log(`Proxying request to: ${apiUrl}`);
     console.log('Request body:', body);
 
@@ -42,22 +42,32 @@ export async function POST(
     });
 
     const data = await response.json();
-    
+
     console.log(`Response from ${apiUrl}:`, data);
 
     if (!response.ok) {
       return NextResponse.json(
-        { 
-          code: response.status, 
-          msg: data.msg || '请求失败', 
-          data: data.data || null, 
-          success: false 
+        {
+          code: response.status,
+          msg: data.msg || '请求失败',
+          data: data.data || null,
+          success: false
         },
         { status: response.status }
       );
     }
 
-    return NextResponse.json(data);
+    const res = NextResponse.json(data);
+
+    if (endpointPath === 'email/regLogin') {
+      res.cookies.set('token', data.data.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      });
+    }
+    return res;
   } catch (error) {
     console.error('Auth proxy error:', error);
     return NextResponse.json(
@@ -96,7 +106,7 @@ async function handleRequest(
 ) {
   try {
     const endpointPath = endpoint.join('/');
-    
+
     if (!endpointPath || endpoint.length === 0) {
       return NextResponse.json(
         { code: 400, msg: '缺少endpoint参数', data: null, success: false },
@@ -115,7 +125,7 @@ async function handleRequest(
     const apiUrl = `${authBaseUrl}/gw/chatweb/user/${endpointPath}`;
     const url = new URL(request.url);
     const searchParams = url.searchParams;
-    
+
     console.log(`Proxying ${method} request to: ${apiUrl}`);
 
     // 构建查询参数
@@ -130,16 +140,16 @@ async function handleRequest(
     });
 
     const data = await response.json();
-    
+
     console.log(`Response from ${apiUrl}:`, data);
 
     if (!response.ok) {
       return NextResponse.json(
-        { 
-          code: response.status, 
-          msg: data.msg || '请求失败', 
-          data: data.data || null, 
-          success: false 
+        {
+          code: response.status,
+          msg: data.msg || '请求失败',
+          data: data.data || null,
+          success: false
         },
         { status: response.status }
       );

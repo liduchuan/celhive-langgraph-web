@@ -11,6 +11,6 @@ export function createClient(apiUrl: string, apiKey: string | undefined, token?:
   return new Client({
     apiKey,
     apiUrl,
-    defaultHeaders: headers
+    defaultHeaders: headers,
   });
 }
