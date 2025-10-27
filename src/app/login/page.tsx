@@ -7,7 +7,10 @@ const LoginButton = () => {
   const router = useRouter();
   return (
     <EmailLoginForm
-      onLoginSuccess={() => router.replace('/chat')}
+      onLoginSuccess={() => {
+        const redirectUrl = new URL(window.location.href).searchParams.get('redirect');
+        router.replace(redirectUrl || '/chat');
+      }}
     />
   );
 };

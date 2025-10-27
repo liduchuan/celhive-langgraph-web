@@ -58,10 +58,6 @@ async function handleRequest(
     // Make the request to LangGraph server
     const response = await fetch(targetUrl, options);
 
-    if (response.status === 403) {
-      return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
-
     // Return the response with CORS headers
     return new NextResponse(response.body, {
       status: response.status,

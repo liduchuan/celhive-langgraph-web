@@ -134,9 +134,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: false,
         isLoading: false,
       });
-
       toast.success("已退出登录");
-      window.location.href = "/login";
+      const pathname = window.location.pathname;
+      window.location.href = `/login?redirect=${encodeURIComponent(pathname)}`;
     } catch (error) {
       console.error("Failed to clear auth state:", error);
       toast.error("退出登录失败");

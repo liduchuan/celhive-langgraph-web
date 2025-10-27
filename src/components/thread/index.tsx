@@ -1,35 +1,34 @@
-import { v4 as uuidv4 } from "uuid";
-import { ReactNode, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { useStreamContext } from "@/providers/Stream";
-import { useState, FormEvent } from "react";
-import { Button } from "../ui/button";
-import { Checkpoint, Message } from "@langchain/langgraph-sdk";
-import { AssistantMessage, AssistantMessageLoading } from "./messages/ai";
-import { HumanMessage } from "./messages/human";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   DO_NOT_RENDER_ID_PREFIX,
   ensureToolCallsHaveResponses,
 } from "@/lib/ensure-tool-responses";
-import { CelHiveLogoSVG } from "../icons/celhive";
-import { TooltipIconButton } from "./tooltip-icon-button";
+import { cn } from "@/lib/utils";
+import { useStreamContext } from "@/providers/Stream";
+import { Checkpoint, Message } from "@langchain/langgraph-sdk";
+import { motion } from "framer-motion";
 import {
   ArrowDown,
   LoaderCircle,
-  PanelRightOpen,
   PanelRightClose,
+  PanelRightOpen,
+  Plus,
   SquarePen,
   XIcon,
-  Plus,
 } from "lucide-react";
-import { useQueryState, parseAsBoolean } from "nuqs";
-import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
-import ThreadHistory from "./history";
+import { parseAsBoolean, useQueryState } from "nuqs";
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import { v4 as uuidv4 } from "uuid";
+import { CelHiveLogoSVG } from "../icons/celhive";
+import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import ThreadHistory from "./history";
+import { AssistantMessage, AssistantMessageLoading } from "./messages/ai";
+import { HumanMessage } from "./messages/human";
+import { TooltipIconButton } from "./tooltip-icon-button";
 // import { GitHubSVG } from "../icons/github";
 // import {
 //   Tooltip,
@@ -37,16 +36,16 @@ import { Switch } from "../ui/switch";
 //   TooltipProvider,
 //   TooltipTrigger,
 // } from "../ui/tooltip";
+import { UserProfile } from "@/components/auth/UserProfile";
 import { useFileUpload } from "@/hooks/use-file-upload";
+import { withDefaultAgentsConfig } from "@/lib/default-agents-config";
 import { ContentBlocksPreview } from "./ContentBlocksPreview";
 import {
-  useArtifactOpen,
   ArtifactContent,
   ArtifactTitle,
   useArtifactContext,
+  useArtifactOpen,
 } from "./artifact";
-import { UserProfile } from "@/components/auth/UserProfile";
-import { withDefaultAgentsConfig } from "@/lib/default-agents-config";
 
 function StickyToBottomContent(props: {
   content: ReactNode;
@@ -142,7 +141,6 @@ export function Thread() {
         // Message has already been logged. do not modify ref, return early.
         return;
       }
-
       // Message is defined, and it has not been logged yet. Save it, and send the error
       lastError.current = message;
       toast.error("An error occurred. Please try again.", {

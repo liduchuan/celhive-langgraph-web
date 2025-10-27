@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { PanelRightClose, PanelRightOpen } from "lucide-react";
 import { parseAsBoolean, useQueryState } from "nuqs";
+import { useAuth } from "../../../providers/Auth";
 import { getContentString } from "../utils";
 
 function ThreadList({
@@ -84,13 +85,19 @@ export default function ThreadHistory() {
 
   const { getThreads, threads, setThreads, threadsLoading, setThreadsLoading } =
     useThreads();
+  const { logout } = useAuth();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     setThreadsLoading(true);
     getThreads()
       .then(setThreads)
-      .catch(console.error)
+      .catch(error => {
+        const { message } = error as unknown as Error;
+        if (message.includes('HTTP 403')) {
+          logout();
+        }
+      })
       .finally(() => setThreadsLoading(false));
   }, []);
 
