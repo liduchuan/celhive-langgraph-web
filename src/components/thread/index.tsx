@@ -1,12 +1,8 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import {
-  DO_NOT_RENDER_ID_PREFIX,
-  ensureToolCallsHaveResponses,
-} from "@/lib/ensure-tool-responses";
+import { ensureToolCallsHaveResponses } from "@/lib/ensure-tool-responses";
 import { cn } from "@/lib/utils";
 import { useStreamContext } from "@/providers/Stream";
 import { Checkpoint, Message } from "@langchain/langgraph-sdk";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import { motion } from "framer-motion";
 import {
   ArrowDown,
@@ -27,9 +23,8 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import ThreadHistory from "./history";
-import { AssistantMessage, AssistantMessageLoading } from "./messages/ai";
-import { HumanMessage } from "./messages/human";
 import { TooltipIconButton } from "./tooltip-icon-button";
+import { VirtualMessageList } from "./virtual-message-list";
 // import { GitHubSVG } from "../icons/github";
 // import {
 //   Tooltip,
@@ -88,122 +83,6 @@ function ScrollToBottom(props: { className?: string }) {
     </Button>
   );
 }
-
-function VirtualMessageList(props: {
-  messages: Message[];
-  isLoading: boolean;
-  handleRegenerate: (parentCheckpoint: Checkpoint | null | undefined) => void;
-  hasNoAIOrToolMessages: boolean;
-  interrupt: any;
-  firstTokenReceived: boolean;
-}) {
-  const { scrollRef, contentRef } = useStickToBottomContext();
-
-  // 过滤消息
-  const filteredMessages = props.messages.filter(
-    (m) => !m.id?.startsWith(DO_NOT_RENDER_ID_PREFIX)
-  );
-
-  // 创建虚拟化实例
-  // measureElement 会自动使用 ResizeObserver 监听元素大小变化
-  const virtualizer = useVirtualizer({
-    count: filteredMessages.length,
-    getScrollElement: () => scrollRef.current,
-    estimateSize: () => 200, // 估计每项高度
-    overscan: 3, // 预渲染项数
-    measureElement:
-      typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-        ? (element) => element?.getBoundingClientRect().height
-        : undefined,
-  });
-
-  const items = virtualizer.getVirtualItems();
-
-  return (
-    <div
-      ref={contentRef}
-      className="pt-8 pb-16 max-w-3xl mx-auto w-full"
-      style={{
-        position: 'relative',
-        height: `${virtualizer.getTotalSize()}px`,
-      }}
-    >
-      {items.map((virtualItem) => {
-        const message = filteredMessages[virtualItem.index];
-        const index = virtualItem.index;
-
-        return (
-          <div
-            key={virtualItem.key}
-            data-index={virtualItem.index}
-            ref={virtualizer.measureElement}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              transform: `translateY(${virtualItem.start}px)`,
-            }}
-          >
-            <div className="mb-4">
-              {message.type === "human" ? (
-                <HumanMessage
-                  key={message.id || `${message.type}-${index}`}
-                  message={message}
-                  isLoading={props.isLoading}
-                />
-              ) : (
-                <AssistantMessage
-                  key={message.id || `${message.type}-${index}`}
-                  message={message}
-                  isLoading={props.isLoading}
-                  handleRegenerate={props.handleRegenerate}
-                />
-              )}
-            </div>
-          </div>
-        );
-      })}
-
-      {/* 渲染在虚拟列表末尾的额外内容 */}
-      {props.hasNoAIOrToolMessages && !!props.interrupt && (
-        <div
-          style={{
-            position: 'absolute',
-            top: `${virtualizer.getTotalSize()}px`,
-            left: 0,
-            width: '100%',
-          }}
-        >
-          <div className="mb-4">
-            <AssistantMessage
-              key="interrupt-msg"
-              message={undefined}
-              isLoading={props.isLoading}
-              handleRegenerate={props.handleRegenerate}
-            />
-          </div>
-        </div>
-      )}
-
-      {props.isLoading && !props.firstTokenReceived && (
-        <div
-          style={{
-            position: 'absolute',
-            top: `${virtualizer.getTotalSize()}px`,
-            left: 0,
-            width: '100%',
-          }}
-        >
-          <div className="mb-4">
-            <AssistantMessageLoading />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 
 export function Thread() {
   const [artifactContext, setArtifactContext] = useArtifactContext();
