@@ -102,10 +102,9 @@ export function VirtualMessageList(props: VirtualMessageListProps) {
               ref={virtualizer.measureElement}
               style={{
                 position: 'absolute',
-                top: 0,
+                top: `${virtualItem.start}px`,
                 left: 0,
                 width: '100%',
-                transform: `translateY(${virtualItem.start}px)`,
               }}
             >
               <div className="mb-4">
