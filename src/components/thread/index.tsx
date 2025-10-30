@@ -368,9 +368,8 @@ export function Thread() {
                 !chatStarted && "mt-[25vh] flex flex-col items-stretch",
                 chatStarted && "grid grid-rows-[1fr_auto]",
               )}
-              contentClassName="pt-8 pb-16  max-w-3xl mx-auto flex flex-col gap-4 w-full"
               content={
-                <>
+                <div className="test pt-8 pb-16  max-w-3xl mx-auto flex flex-col gap-4 w-full">
                   {messages
                     .filter((m) => !m.id?.startsWith(DO_NOT_RENDER_ID_PREFIX))
                     .map((message, index) =>
@@ -402,7 +401,7 @@ export function Thread() {
                   {isLoading && !firstTokenReceived && (
                     <AssistantMessageLoading />
                   )}
-                </>
+                </div>
               }
               footer={
                 <div className="sticky bottom-0 flex flex-col items-center gap-8 bg-white">
