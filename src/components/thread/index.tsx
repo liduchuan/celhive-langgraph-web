@@ -479,7 +479,9 @@ export function Thread() {
                             /**
                              * Run 实验：
                              *  rollback 中断后端输出，并删除当前这一条输出，包括 prompt
-                             *  interrupt 中断后端输出，但保留当前输出。只保留已经输出完的 block，并不是肉眼见到的完整内容。
+                             *  interrupt 中断后端输出，但保留当前输出。只保留已经输出完的 block，并不是肉眼见到的完整内容
+                             * 
+                             *  stream.stop() 用于中断前端输出，但是后端输出还会继续
                              */
                             onClick={() => streamingRunId && stream.client.runs.cancel(threadId!, streamingRunId, false, 'rollback')}
                             className="ml-auto"
