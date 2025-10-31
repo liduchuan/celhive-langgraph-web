@@ -16,7 +16,7 @@ importers:
         version: 1.0.1(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(zod-to-json-schema@3.24.6(zod@4.1.12))(zod@4.1.12)
       '@langchain/langgraph-sdk':
         specifier: github:CelHive-AI/langgraphjs#main&path:/libs/sdk
-        version: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/5f9ff42cbb2739621ffa511b89d7b5e76704dafe#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@radix-ui/react-avatar':
         specifier: ^1.1.10
         version: 1.1.10(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -694,8 +694,8 @@ packages:
       react-dom:
         optional: true
 
-  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/5f9ff42cbb2739621ffa511b89d7b5e76704dafe#path:/libs/sdk':
-    resolution: {path: /libs/sdk, tarball: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/5f9ff42cbb2739621ffa511b89d7b5e76704dafe}
+  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c#path:/libs/sdk':
+    resolution: {path: /libs/sdk, tarball: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c}
     version: 1.0.0
     peerDependencies:
       '@langchain/core': ^1.0.1
@@ -4093,7 +4093,7 @@ snapshots:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
-  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/5f9ff42cbb2739621ffa511b89d7b5e76704dafe#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       p-queue: 6.6.2
       p-retry: 4.6.2
