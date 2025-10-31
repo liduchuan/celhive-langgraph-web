@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { endpoint: string[] } }
+  { params }: { params: Promise<{ endpoint: string[] }> }
 ) {
   try {
-    const { endpoint } = params;
+    const { endpoint } = await params;
     const endpointPath = endpoint.join('/');
 
     // 验证endpoint参数

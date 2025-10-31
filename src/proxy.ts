@@ -43,7 +43,7 @@ function isPublicRoute(pathname: string): boolean {
 /**
  * 中间件主函数
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 获取 token
