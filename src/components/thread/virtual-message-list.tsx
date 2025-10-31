@@ -16,6 +16,7 @@ interface VirtualMessageListProps {
 }
 
 export function VirtualMessageList(props: VirtualMessageListProps) {
+
   const { scrollRef, contentRef, isAtBottom, scrollToBottom } = useStickToBottomContext();
   const isInitialMountRef = useRef(true);
   const lastMessageCountRef = useRef(0);
@@ -26,7 +27,7 @@ export function VirtualMessageList(props: VirtualMessageListProps) {
   );
 
   // 创建虚拟化实例
-  // measureElement 会自动使用 ResizeObserver 监听元素大小变化
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: filteredMessages.length,
     getScrollElement: () => scrollRef.current,
