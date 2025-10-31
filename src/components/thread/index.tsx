@@ -14,7 +14,7 @@ import {
   XIcon,
 } from "lucide-react";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import { v4 as uuidv4 } from "uuid";
@@ -226,6 +226,25 @@ export function Thread() {
   const hasNoAIOrToolMessages = !messages.find(
     (m) => m.type === "ai" || m.type === "tool",
   );
+
+  // 当前正在输出的 run id
+  const streamingRunId: string | null = useMemo(() => {
+    if (isLoading) {
+      const lastMessage = messages[messages.length - 1];
+      if (!lastMessage) {
+        return null;
+      }
+      const metadata = stream.getMessagesMetadata(lastMessage);
+      if (!metadata) {
+        return null;
+      }
+      console.log(metadata);
+      return metadata.streamMetadata.run_id;
+    } else {
+      return null;
+    }
+  }, [isLoading, messages])
+
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
@@ -457,8 +476,14 @@ export function Thread() {
                         {stream.isLoading ? (
                           <Button
                             key="stop"
-                            onClick={() => stream.stop()}
+                            /**
+                             * Run 实验：
+                             *  rollback 中断后端输出，并删除当前这一条输出，包括 prompt
+                             *  interrupt 中断后端输出，但保留当前输出。只保留已经输出完的 block，并不是肉眼见到的完整内容。
+                             */
+                            onClick={() => streamingRunId && stream.client.runs.cancel(threadId!, streamingRunId, false, 'rollback')}
                             className="ml-auto"
+                            disabled={!streamingRunId}
                           >
                             <LoaderCircle className="h-4 w-4 animate-spin" />
                             Cancel

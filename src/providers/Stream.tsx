@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { getApiKey } from "@/lib/api-key";
 import { type Message } from "@langchain/langgraph-sdk";
-import { useStream, useHiveStream } from "@langchain/langgraph-sdk/react";
+import { useHiveStream } from "@langchain/langgraph-sdk/react";
 import {
   isRemoveUIMessage,
   isUIMessage,
@@ -26,6 +26,7 @@ import React, {
 import { toast } from "sonner";
 import { useAuth } from "./Auth";
 import { useThreads } from "./Thread";
+import { log } from "node:console";
 
 export type StateType = { messages: Message[]; ui?: UIMessage[] };
 
@@ -116,7 +117,7 @@ const StreamSession = ({
       // Refetch threads list when thread ID changes.
       // Wait for some seconds before fetching so we're able to get the new thread that was created.
       sleep().then(() => getThreads().then(setThreads).catch(console.error));
-    },
+    }
   });
 
   useEffect(() => {
