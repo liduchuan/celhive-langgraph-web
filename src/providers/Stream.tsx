@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { getApiKey } from "@/lib/api-key";
 import { type Message } from "@langchain/langgraph-sdk";
-import { useStream, useCelHiveStream } from "@langchain/langgraph-sdk/react";
+import { useStream, useHiveStream } from "@langchain/langgraph-sdk/react";
 import {
   isRemoveUIMessage,
   isUIMessage,
@@ -29,7 +29,7 @@ import { useThreads } from "./Thread";
 
 export type StateType = { messages: Message[]; ui?: UIMessage[] };
 
-const useTypedStream = useStream<
+const useTypedStream = useHiveStream<
   StateType,
   {
     UpdateType: {

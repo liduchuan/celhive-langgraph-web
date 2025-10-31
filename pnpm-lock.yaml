@@ -16,7 +16,7 @@ importers:
         version: 1.0.1(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(zod-to-json-schema@3.24.6(zod@4.1.12))(zod@4.1.12)
       '@langchain/langgraph-sdk':
         specifier: github:CelHive-AI/langgraphjs#main&path:/libs/sdk
-        version: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/323659a1047fd1196d061241db3e4d5aae297c19#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@radix-ui/react-avatar':
         specifier: ^1.1.10
         version: 1.1.10(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -72,8 +72,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       lucide-react:
-        specifier: ^0.548.0
-        version: 0.548.0(react@19.2.0)
+        specifier: ^0.552.0
+        version: 0.552.0(react@19.2.0)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -694,8 +694,8 @@ packages:
       react-dom:
         optional: true
 
-  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c#path:/libs/sdk':
-    resolution: {path: /libs/sdk, tarball: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c}
+  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/323659a1047fd1196d061241db3e4d5aae297c19#path:/libs/sdk':
+    resolution: {path: /libs/sdk, tarball: https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/323659a1047fd1196d061241db3e4d5aae297c19}
     version: 1.0.0
     peerDependencies:
       '@langchain/core': ^1.0.1
@@ -1656,8 +1656,8 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-  baseline-browser-mapping@2.8.21:
-    resolution: {integrity: sha512-JU0h5APyQNsHOlAM7HnQnPToSDQoEBZqzu/YBlqDnEeymPnZDREeXJA3KBMQee+dKteAxZ2AtvQEvVYdZf241Q==}
+  baseline-browser-mapping@2.8.22:
+    resolution: {integrity: sha512-/tk9kky/d8T8CTXIQYASLyhAxR5VwL3zct1oAoVTaOUHwrmsGnfbRwNdEq+vOl2BN8i3PcDdP0o4Q+jjKQoFbQ==}
     hasBin: true
 
   brace-expansion@1.1.12:
@@ -1695,8 +1695,8 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
 
-  caniuse-lite@1.0.30001751:
-    resolution: {integrity: sha512-A0QJhug0Ly64Ii3eIqHu5X51ebln3k4yTUkY1j8drqpWHVreg/VLijN48cZ1bYPiqOQuqpkIKnzr/Ul8V+p6Cw==}
+  caniuse-lite@1.0.30001752:
+    resolution: {integrity: sha512-vKUk7beoukxE47P5gcVNKkDRzXdVofotshHwfR9vmpeFKxmI5PBpgOMC18LUJUA/DvJ70Y7RveasIBraqsyO/g==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -1888,8 +1888,8 @@ packages:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
 
-  electron-to-chromium@1.5.243:
-    resolution: {integrity: sha512-ZCphxFW3Q1TVhcgS9blfut1PX8lusVi2SvXQgmEEnK4TCmE1JhH2JkjJN+DNt0pJJwfBri5AROBnz2b/C+YU9g==}
+  electron-to-chromium@1.5.244:
+    resolution: {integrity: sha512-OszpBN7xZX4vWMPJwB9illkN/znA8M36GQqQxi6MNy9axWxhOfJyZZJtSLQCpEFLHP2xK33BiWx9aIuIEXVCcw==}
 
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
@@ -2658,8 +2658,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@0.548.0:
-    resolution: {integrity: sha512-63b16z63jM9yc1MwxajHeuu0FRZFsDtljtDjYm26Kd86UQ5HQzu9ksEtoUUw4RBuewodw/tGFmvipePvRsKeDA==}
+  lucide-react@0.552.0:
+    resolution: {integrity: sha512-g9WCjmfwqbexSnZE+2cl21PCfXOcqnGeWeMTNAOGEfpPbm/ZF4YIq77Z8qWrxbu660EKuLB4nSLggoKnCb+isw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -4093,7 +4093,7 @@ snapshots:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
-  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/f18a632715e7efd8ed132f7ab6f25647672e191c#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@langchain/langgraph-sdk@https://codeload.github.com/CelHive-AI/langgraphjs/tar.gz/323659a1047fd1196d061241db3e4d5aae297c19#path:/libs/sdk(@langchain/core@1.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -4960,7 +4960,7 @@ snapshots:
   autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
       browserslist: 4.27.0
-      caniuse-lite: 1.0.30001751
+      caniuse-lite: 1.0.30001752
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
@@ -4981,7 +4981,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  baseline-browser-mapping@2.8.21: {}
+  baseline-browser-mapping@2.8.22: {}
 
   brace-expansion@1.1.12:
     dependencies:
@@ -4998,9 +4998,9 @@ snapshots:
 
   browserslist@4.27.0:
     dependencies:
-      baseline-browser-mapping: 2.8.21
-      caniuse-lite: 1.0.30001751
-      electron-to-chromium: 1.5.243
+      baseline-browser-mapping: 2.8.22
+      caniuse-lite: 1.0.30001752
+      electron-to-chromium: 1.5.244
       node-releases: 2.0.27
       update-browserslist-db: 1.1.4(browserslist@4.27.0)
 
@@ -5025,7 +5025,7 @@ snapshots:
 
   camelcase@6.3.0: {}
 
-  caniuse-lite@1.0.30001751: {}
+  caniuse-lite@1.0.30001752: {}
 
   ccount@2.0.1: {}
 
@@ -5190,7 +5190,7 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.2.0
 
-  electron-to-chromium@1.5.243: {}
+  electron-to-chromium@1.5.244: {}
 
   emoji-regex@9.2.2: {}
 
@@ -6127,7 +6127,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.548.0(react@19.2.0):
+  lucide-react@0.552.0(react@19.2.0):
     dependencies:
       react: 19.2.0
 
@@ -6547,7 +6547,7 @@ snapshots:
     dependencies:
       '@next/env': 16.0.1
       '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001751
+      caniuse-lite: 1.0.30001752
       postcss: 8.4.31
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
