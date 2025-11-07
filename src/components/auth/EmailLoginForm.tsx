@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/providers/Auth";
-import { toast } from "sonner";
 import { Loader2, Mail } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface EmailLoginFormProps {
   onLoginSuccess?: () => void;
   className?: string;
 }
 
-export const EmailLoginForm: React.FC<EmailLoginFormProps> = ({ 
-  onLoginSuccess, 
-  className 
+export const EmailLoginForm: React.FC<EmailLoginFormProps> = ({
+  onLoginSuccess,
+  className
 }) => {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
@@ -94,10 +94,10 @@ export const EmailLoginForm: React.FC<EmailLoginFormProps> = ({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          email, 
-          code, 
-          inviteCode: inviteCode.trim() 
+        body: JSON.stringify({
+          email,
+          code,
+          inviteCode: inviteCode.trim()
         }),
       });
 
@@ -116,7 +116,7 @@ export const EmailLoginForm: React.FC<EmailLoginFormProps> = ({
         // 登录
         login(data.data.token, user);
         onLoginSuccess?.();
-        
+
         toast.success("登录成功", {
           description: `欢迎回来，${username}！`,
         });

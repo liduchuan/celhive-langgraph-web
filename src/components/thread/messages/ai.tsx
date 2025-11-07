@@ -1,19 +1,19 @@
-import { parsePartialJson } from "@langchain/core/output_parsers";
-import { useStreamContext } from "@/providers/Stream";
-import { AIMessage, Checkpoint, Message } from "@langchain/langgraph-sdk";
-import { getContentString } from "../utils";
-import { BranchSwitcher, CommandBar } from "./shared";
-import { MarkdownText } from "../markdown-text";
-import { LoadExternalComponent } from "@langchain/langgraph-sdk/react-ui";
-import { cn } from "@/lib/utils";
-import { ToolCalls, ToolResult } from "./tool-calls";
-import { MessageContentComplex } from "@langchain/core/messages";
-import { Fragment } from "react/jsx-runtime";
 import { isAgentInboxInterruptSchema } from "@/lib/agent-inbox-interrupt";
+import { cn } from "@/lib/utils";
+import { useStreamContext } from "@/providers/Stream";
+import { MessageContentComplex } from "@langchain/core/messages";
+import { parsePartialJson } from "@langchain/core/output_parsers";
+import { AIMessage, Checkpoint, Message } from "@langchain/langgraph-sdk";
+import { LoadExternalComponent } from "@langchain/langgraph-sdk/react-ui";
+import { parseAsBoolean, useQueryState } from "nuqs";
+import { Fragment } from "react/jsx-runtime";
 import { ThreadView } from "../agent-inbox";
-import { useQueryState, parseAsBoolean } from "nuqs";
-import { GenericInterruptView } from "./generic-interrupt";
 import { useArtifact } from "../artifact";
+import { MarkdownText } from "../markdown-text";
+import { getContentString } from "../utils";
+import { GenericInterruptView } from "./generic-interrupt";
+import { BranchSwitcher, CommandBar } from "./shared";
+import { ToolCalls, ToolResult } from "./tool-calls";
 // import celhiveUiComponents from "@/components/celhive-ui-components/src/app/ui/index";
 
 function CustomComponent({
@@ -39,7 +39,6 @@ function CustomComponent({
           stream={thread}
           message={customComponent}
           meta={{ ui: customComponent, artifact }}
-          namespace="agents-ui"
           fallback={<div>Loading...</div>}
         />
       ))}
@@ -89,8 +88,8 @@ function Interrupt({
           <ThreadView interrupt={interruptValue} />
         )}
       {interruptValue &&
-      !isAgentInboxInterruptSchema(interruptValue) &&
-      (isLastMessage || hasNoAIOrToolMessages) ? (
+        !isAgentInboxInterruptSchema(interruptValue) &&
+        (isLastMessage || hasNoAIOrToolMessages) ? (
         <GenericInterruptView interrupt={interruptValue} />
       ) : null}
     </>
@@ -145,7 +144,7 @@ export function AssistantMessage({
   }
 
   return (
-    <div className="group mr-auto flex items-start gap-2">
+    <div className="group items-start gap-2">
       <div className="flex flex-col gap-2">
         {isToolResult ? (
           <>

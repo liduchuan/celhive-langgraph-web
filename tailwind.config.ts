@@ -1,6 +1,10 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ["class"],
+import type { Config } from 'tailwindcss'
+import tailwindcssAnimate from 'tailwindcss-animate'
+import tailwindScrollbar from 'tailwind-scrollbar'
+
+
+export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{ts,tsx,js,jsx}",
@@ -61,5 +65,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
-};
+  plugins: [tailwindcssAnimate, tailwindScrollbar],
+} satisfies Config

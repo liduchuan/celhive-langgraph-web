@@ -1,4 +1,6 @@
-import React, { createContext, useContext, ReactNode, useState, useEffect } from "react";
+'use client'
+import { logout as logoutAction } from '@/action/auth';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export interface User {
@@ -52,7 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const storedToken = localStorage.getItem(AUTH_STORAGE_KEY);
       const storedUser = localStorage.getItem(USER_STORAGE_KEY);
-      
+
       if (storedToken && storedUser) {
         // 检查token是否过期
         if (isTokenExpired(storedToken)) {
@@ -96,14 +98,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       localStorage.setItem(AUTH_STORAGE_KEY, token);
       localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-      
+
       setAuthState({
         user,
         token,
         isAuthenticated: true,
         isLoading: false,
       });
-      
+
       toast.success("登录成功", {
         description: `欢迎回来，${user.name}！`,
       });
@@ -116,21 +118,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     try {
+      // 调用 server action 删除服务端 cookie
+      await logoutAction();
+
+      // 清除本地存储
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(USER_STORAGE_KEY);
-      
+
+      // 更新状态
       setAuthState({
         user: null,
         token: null,
         isAuthenticated: false,
         isLoading: false,
       });
-      
       toast.success("已退出登录");
+      const pathname = window.location.pathname;
+      window.location.href = `/login?redirect=${encodeURIComponent(pathname)}`;
     } catch (error) {
       console.error("Failed to clear auth state:", error);
+      toast.error("退出登录失败");
     }
   };
 

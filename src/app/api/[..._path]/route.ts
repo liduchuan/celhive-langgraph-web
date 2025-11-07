@@ -8,14 +8,14 @@ async function handleRequest(
   try {
     const apiUrl = process.env.LANGGRAPH_API_URL;
     const apiKey = process.env.LANGSMITH_API_KEY;
-    
+
     if (!apiUrl) {
       throw new Error("LANGGRAPH_API_URL environment variable is required");
     }
 
     // Extract the path from the request URL
     const path = request.nextUrl.pathname.replace(/^\/?api\//, "");
-    
+
     // Build the target URL
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.search);
@@ -57,8 +57,6 @@ async function handleRequest(
 
     // Make the request to LangGraph server
     const response = await fetch(targetUrl, options);
-    
-    console.log(`Response status: ${response.status}`);
 
     // Return the response with CORS headers
     return new NextResponse(response.body, {

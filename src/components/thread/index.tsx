@@ -1,35 +1,30 @@
-import { v4 as uuidv4 } from "uuid";
-import { ReactNode, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { ensureToolCallsHaveResponses } from "@/lib/ensure-tool-responses";
 import { cn } from "@/lib/utils";
 import { useStreamContext } from "@/providers/Stream";
-import { useState, FormEvent } from "react";
-import { Button } from "../ui/button";
 import { Checkpoint, Message } from "@langchain/langgraph-sdk";
-import { AssistantMessage, AssistantMessageLoading } from "./messages/ai";
-import { HumanMessage } from "./messages/human";
-import {
-  DO_NOT_RENDER_ID_PREFIX,
-  ensureToolCallsHaveResponses,
-} from "@/lib/ensure-tool-responses";
-import { CelHiveLogoSVG } from "../icons/celhive";
-import { TooltipIconButton } from "./tooltip-icon-button";
+import { motion } from "framer-motion";
 import {
   ArrowDown,
   LoaderCircle,
-  PanelRightOpen,
   PanelRightClose,
+  PanelRightOpen,
+  Plus,
   SquarePen,
   XIcon,
-  Plus,
 } from "lucide-react";
-import { useQueryState, parseAsBoolean } from "nuqs";
-import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
-import ThreadHistory from "./history";
+import { parseAsBoolean, useQueryState } from "nuqs";
+import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import { v4 as uuidv4 } from "uuid";
+import { CelHiveLogoSVG } from "../icons/celhive";
+import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import ThreadHistory from "./history";
+import { TooltipIconButton } from "./tooltip-icon-button";
+import { VirtualMessageList } from "./virtual-message-list";
 // import { GitHubSVG } from "../icons/github";
 // import {
 //   Tooltip,
@@ -37,16 +32,16 @@ import { Switch } from "../ui/switch";
 //   TooltipProvider,
 //   TooltipTrigger,
 // } from "../ui/tooltip";
+import { UserProfile } from "@/components/auth/UserProfile";
 import { useFileUpload } from "@/hooks/use-file-upload";
+import { withDefaultAgentsConfig } from "@/lib/default-agents-config";
 import { ContentBlocksPreview } from "./ContentBlocksPreview";
 import {
-  useArtifactOpen,
   ArtifactContent,
   ArtifactTitle,
   useArtifactContext,
+  useArtifactOpen,
 } from "./artifact";
-import { UserProfile } from "@/components/auth/UserProfile";
-import { withDefaultAgentsConfig } from "@/lib/default-agents-config";
 
 function StickyToBottomContent(props: {
   content: ReactNode;
@@ -88,7 +83,6 @@ function ScrollToBottom(props: { className?: string }) {
     </Button>
   );
 }
-
 
 export function Thread() {
   const [artifactContext, setArtifactContext] = useArtifactContext();
@@ -142,7 +136,6 @@ export function Thread() {
         // Message has already been logged. do not modify ref, return early.
         return;
       }
-
       // Message is defined, and it has not been logged yet. Save it, and send the error
       lastError.current = message;
       toast.error("An error occurred. Please try again.", {
@@ -233,6 +226,25 @@ export function Thread() {
   const hasNoAIOrToolMessages = !messages.find(
     (m) => m.type === "ai" || m.type === "tool",
   );
+
+  // 当前正在输出的 run id
+  const streamingRunId: string | null = useMemo(() => {
+    if (isLoading) {
+      const lastMessage = messages[messages.length - 1];
+      if (!lastMessage) {
+        return null;
+      }
+      const metadata = stream.getMessagesMetadata(lastMessage);
+      if (!metadata) {
+        return null;
+      }
+      console.log(metadata);
+      return metadata.streamMetadata.run_id;
+    } else {
+      return null;
+    }
+  }, [isLoading, messages])
+
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
@@ -370,41 +382,15 @@ export function Thread() {
                 !chatStarted && "mt-[25vh] flex flex-col items-stretch",
                 chatStarted && "grid grid-rows-[1fr_auto]",
               )}
-              contentClassName="pt-8 pb-16  max-w-3xl mx-auto flex flex-col gap-4 w-full"
               content={
-                <>
-                  {messages
-                    .filter((m) => !m.id?.startsWith(DO_NOT_RENDER_ID_PREFIX))
-                    .map((message, index) =>
-                      message.type === "human" ? (
-                        <HumanMessage
-                          key={message.id || `${message.type}-${index}`}
-                          message={message}
-                          isLoading={isLoading}
-                        />
-                      ) : (
-                        <AssistantMessage
-                          key={message.id || `${message.type}-${index}`}
-                          message={message}
-                          isLoading={isLoading}
-                          handleRegenerate={handleRegenerate}
-                        />
-                      ),
-                    )}
-                  {/* Special rendering case where there are no AI/tool messages, but there is an interrupt.
-                    We need to render it outside of the messages list, since there are no messages to render */}
-                  {hasNoAIOrToolMessages && !!stream.interrupt && (
-                    <AssistantMessage
-                      key="interrupt-msg"
-                      message={undefined}
-                      isLoading={isLoading}
-                      handleRegenerate={handleRegenerate}
-                    />
-                  )}
-                  {isLoading && !firstTokenReceived && (
-                    <AssistantMessageLoading />
-                  )}
-                </>
+                <VirtualMessageList
+                  messages={messages}
+                  isLoading={isLoading}
+                  handleRegenerate={handleRegenerate}
+                  hasNoAIOrToolMessages={hasNoAIOrToolMessages}
+                  interrupt={stream.interrupt}
+                  firstTokenReceived={firstTokenReceived}
+                />
               }
               footer={
                 <div className="sticky bottom-0 flex flex-col items-center gap-8 bg-white">
@@ -490,8 +476,15 @@ export function Thread() {
                         {stream.isLoading ? (
                           <Button
                             key="stop"
-                            onClick={() => stream.stop()}
+                            /**
+                             * 实验：
+                             *  rollback 中断后端输出，并从 thread 中删除当前这一条输出，包括 prompt
+                             *  interrupt 中断后端输出，但保留当前输出。只保留已经输出完的 block，并不是肉眼见到的完整内容
+                             *  stream.stop() 用于中断前端输出，但是后端输出还会继续
+                             */
+                            onClick={() => streamingRunId && stream.client.runs.cancel(threadId!, streamingRunId, false, 'rollback')}
                             className="ml-auto"
+                            disabled={!streamingRunId}
                           >
                             <LoaderCircle className="h-4 w-4 animate-spin" />
                             Cancel
